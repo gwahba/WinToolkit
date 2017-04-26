@@ -1,20 +1,32 @@
-﻿namespace WinToolkit
+﻿using System.Threading;
+
+namespace WinToolkit
 {
 	public class ReferenceCounter
 	{
+		private readonly Mutex _lock = new Mutex();
 		private int _currentValue = 0;
 		public int Reset()
 		{
-			_currentValue = 0;
-			return _currentValue;
+			using (new MutexLocker(_lock))
+			{
+				_currentValue = 0;
+				return _currentValue;
+			}
 		}
 		public int Decrement()
 		{
-			return --_currentValue;
+			using (new MutexLocker(_lock))
+			{
+				return --_currentValue;
+			}
 		}
 		public int Increment()
 		{
-			return ++_currentValue;
+			using (new MutexLocker(_lock))
+			{
+				return ++_currentValue;
+			}
 		}
 		public bool IsNoReferences
 		{
