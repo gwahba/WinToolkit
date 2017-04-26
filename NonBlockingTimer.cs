@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace WinToolkit
 {
-	/// <summary>
-	/// Not Accurate Timer
-	/// </summary>
 	public class NonBlockingTimer : IDisposable
 	{
 		private bool _isStarted = false;
