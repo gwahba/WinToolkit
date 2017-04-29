@@ -9,10 +9,8 @@ namespace WinToolkit
 {
 	public class InternetConnectionCheker
 	{
-		public static bool IsConnectionAvailable()
+		private static bool InternalIsConnectionAvailable(int timeout)
 		{
-			//return true;
-			const int timeout = 3000;
 			const string host = "google.com";
 
 			var ping = new Ping();
@@ -28,6 +26,16 @@ namespace WinToolkit
 			{
 				return false;
 			}
+		}
+
+		public static bool IsConnectionAvailable(int retryCount = 0, int timeoutInMSec = 3000)
+		{
+			bool status = false;
+			do {
+				status = InternalIsConnectionAvailable(timeoutInMSec);
+			} while(retryCount-- > 0)
+
+			return status;
 		}
 	}
 }
