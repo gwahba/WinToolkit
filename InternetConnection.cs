@@ -31,11 +31,30 @@ namespace WinToolkit
 		public static bool IsConnectionAvailable(int retryCount = 0, int timeoutInMSec = 3000)
 		{
 			bool status = false;
-			do {
-				status = InternalIsConnectionAvailable(timeoutInMSec);
-			} while(retryCount-- > 0)
+            do
+            {
+                status = InternalIsConnectionAvailable(timeoutInMSec);
+            } while (retryCount-- > 0);
 
 			return status;
 		}
 	}
+    public class NetworkInterfaceCardAttributes
+    {
+        public static string GetMacAddress()
+        {
+            // Looping through all interfaces to get the active one ..
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if ((nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
+                    nic.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                    && (nic.OperationalStatus == OperationalStatus.Up))
+                {
+                    return nic.GetPhysicalAddress().ToString();
+                }
+            }
+            return null;
+        }
+    }
 }
